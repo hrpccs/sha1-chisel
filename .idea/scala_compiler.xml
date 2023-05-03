@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ScalaCompilerConfiguration">
+    <profile name="sbt 1" modules="sha1-fpga_3342" />
+    <profile name="sbt 2" modules="sha1-fpga">
+      <option name="reflectiveCalls" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-Xcheckinit" />
+      </parameters>
+      <plugins>
+        <plugin path="C:\Users\hrpccs\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\edu\berkeley\cs\chisel3-plugin_2.13.10\3.6.0\chisel3-plugin_2.13.10-3.6.0.jar" />
+      </plugins>
+    </profile>
+  </component>
+</project>
