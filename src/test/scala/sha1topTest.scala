@@ -145,16 +145,13 @@ class sha1topTest extends AnyFlatSpec with ChiselScalatestTester {
     // simulate a situation that c.io.in is 0x61626380L, then 0x0, 0x0 and so on
     // use a vector to store the time seq value of c.io.in
     //
-    val str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-//    val str = "abc"
+    val str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     val actuallength = str.length
     val paddedString = str.padTo(str.length + (4 - str.length % 4), '\u0000')
     val stringLength = paddedString.length
     val byteBuffer = ByteBuffer.allocate(stringLength).put(paddedString.getBytes(StandardCharsets.US_ASCII))
     byteBuffer.flip()
     val inputArray = Array.fill(stringLength / 4)(byteBuffer.getInt())
-//    println(inputArray.map(_.toHexString).mkString(",")
-
     test(new testbench).withAnnotations(TestAnnotations.annos) { c =>
       c.io.restart.poke(false.B)
       c.io.start.poke(true.B)
@@ -171,7 +168,7 @@ class sha1topTest extends AnyFlatSpec with ChiselScalatestTester {
       println(String.format("substr's length\t                SHA1            \t           standardsha1                         \tequal?", str))
       for(i <- 0 until actuallength){
         c.io.restart.poke(false.B)
-        c.clock.step(110 * (1+ i/50) + i)
+        c.clock.step(190 * (1+ i/50) + i)
         c.io.valid.expect(true.B)
         val h0 = c.io.h0.peek().litValue.toLong
         val h1 = c.io.h1.peek().litValue.toLong
@@ -181,9 +178,6 @@ class sha1topTest extends AnyFlatSpec with ChiselScalatestTester {
         val myoutput = String.format("%08x%08x%08x%08x%08x",h0,h1,h2,h3,h4)
         val ans = sha1(str.substring(0,i))
         println(String.format("%12d\t%s\t%s\t%s",i,myoutput,ans,myoutput.equals(ans)))
-//        println(String.format("%4d\t%08x%08x%08x%08x%08x\t%s\t", i,h0,h1,h2,h3,h4))
-        // h0 - h4 must print as hex
-//        println(s"hash str:$str, SHA1: ${h0.toHexString}${h1.toHexString}${h2.toHexString}${h3.toHexString}${h4.toHexString}")
         c.io.restart.poke(true.B)
         c.clock.step()
       }
